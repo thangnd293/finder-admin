@@ -1,23 +1,29 @@
-import { Container, Title, Text, Button, Group } from '@mantine/core';
-import classes from './ErrorPage.module.css';
-import { Illustration } from '@/assets/svg';
+import { ROUTE } from "@/constants/route";
+import { Button, Text } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 export default function ErrorPage() {
   return (
-    <Container className={classes.root}>
-      <div className={classes.inner}>
-        <Illustration className={classes.image} />
-        <div className={classes.content}>
-          <Title className={classes.title}>Nothing to see here</Title>
-          <Text c="dimmed" size="lg" ta="center" className={classes.description}>
-            Page you are trying to open does not exist. You may have mistyped the address, or the
-            page has been moved to another URL. If you think this is an error contact support.
-          </Text>
-          <Group align="center">
-            <Button size="md">Take me back to home page</Button>
-          </Group>
+    <main className="grid min-h-screen place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+      <div className="text-center">
+        <Text c="blue" fw="bold">
+          404
+        </Text>
+        <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          Page not found
+        </h1>
+        <p className="mt-6 text-base leading-7 text-gray-600">
+          Sorry, we couldn't find the page you're looking for.
+        </p>
+        <div className="mt-10 flex items-center justify-center gap-x-6">
+          <Button component={Link} to={ROUTE.HOME}>
+            Go back home
+          </Button>
+          <Button variant="subtle">
+            Contact support <span aria-hidden="true">&rarr;</span>
+          </Button>
         </div>
       </div>
-    </Container>
+    </main>
   );
 }
