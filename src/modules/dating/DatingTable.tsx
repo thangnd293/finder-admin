@@ -1,12 +1,14 @@
 import UserInfo from "@/components/UserInfo";
 import { useTable } from "@/hooks/useTable";
 import { useAllDating } from "@/services/dating/useAllDating";
-import { Dating, DatingStatus } from "@/types/dating";
+import { Dating, ReviewDatingStatus } from "@/types/dating";
 import { Badge } from "@mantine/core";
 import { MRT_ColumnDef, MantineReactTable } from "mantine-react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import DatingReviewDialog from "./DatingReviewDialog";
 
 const DatingTable = () => {
+  const [selectedDating, setSelectedDating] = useState<Dating | null>(null);
   const { data } = useAllDating();
 
   const columns = useMemo<MRT_ColumnDef<Dating>[]>(
@@ -61,9 +63,24 @@ const DatingTable = () => {
   const table = useTable({
     columns,
     data: data?.results || [],
+    mantineTableBodyRowProps: ({ row }) => ({
+      onClick: () => setSelectedDating(row.original),
+      sx: { cursor: "pointer" },
+    }),
   });
 
-  return <MantineReactTable table={table} />;
+  return (
+    <>
+      <MantineReactTable table={table} />
+      {selectedDating && (
+        <DatingReviewDialog
+          dating={selectedDating}
+          isOpen={!!selectedDating}
+          onClose={() => setSelectedDating(null)}
+        />
+      )}
+    </>
+  );
 };
 
 export default DatingTable;
@@ -74,26 +91,26 @@ const DatingStatusBadge = ({
   status: Dating["reviewDatingStatus"];
 }) => {
   switch (status) {
-    case DatingStatus.WAIT_FOR_REVIEW:
+    case ReviewDatingStatus.WAIT_FOR_REVIEW:
       return (
         <Badge radius="xs" color="orange">
           Đang chờ
         </Badge>
       );
-    case DatingStatus.SUCCESS:
+    case ReviewDatingStatus.SUCCESS:
       return (
         <Badge radius="xs" color="green">
           Thành công
         </Badge>
       );
-    case DatingStatus.NOT_JOINING:
+    case ReviewDatingStatus.NOT_JOINING:
       return (
         <Badge radius="xs" color="gray">
           Không tham gia
         </Badge>
       );
-    case DatingStatus.FAILED:
-    case DatingStatus.HALFWAY:
+    case ReviewDatingStatus.FAILED:
+    case ReviewDatingStatus.HALFWAY:
       return (
         <Badge radius="xs" color="red">
           Thất bại
