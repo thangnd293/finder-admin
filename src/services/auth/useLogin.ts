@@ -14,10 +14,13 @@ interface LoginResponse {
 }
 
 const login = async ({ email, password }: LoginPayload) => {
-  const { data } = await axiosInstance.post<LoginResponse>("/auth/verify-otp", {
-    phoneNumber: email,
-    otp: password,
-  });
+  const { data } = await axiosInstance.post<LoginResponse>(
+    "/auth/admin/login",
+    {
+      email: email,
+      password: password,
+    }
+  );
 
   return data;
 };

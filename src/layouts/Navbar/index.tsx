@@ -62,7 +62,7 @@ export default function Navbar() {
 
       <MantineNavbar.Section>
         <div className="space-x-2 flex items-center px-5 py-4 border-b border-solid border-0 border-border-accent">
-          <Avatar src={currentUser?.images?.[0].url} size={50} radius="md" />
+          <Avatar src={currentUser?.image} size={50} radius="md" />
           <div className="overflow-hidden">
             <Text truncate fz="sm" c="white">
               {currentUser?.name}
@@ -103,16 +103,16 @@ const data = [
     label: "Dashboard",
     icon: IconDeviceDesktopAnalytics,
   },
-  { link: ROUTE.REPORT, label: "Report", icon: IconFlag },
-  { link: ROUTE.OFFER, label: "Offer", icon: IconBuildingStore },
+  { link: ROUTE.REPORT, label: "Báo cáo", icon: IconFlag },
+  { link: ROUTE.OFFER, label: "Dịch vụ", icon: IconBuildingStore },
   {
-    link: ROUTE.DATING_FEEDBACK,
-    label: "Dating feedback",
+    link: ROUTE.DATING,
+    label: "Cuộc hẹn",
     icon: IconPhotoHeart,
   },
   {
     link: ROUTE.VIDEO_CALL_FEEDBACK,
-    label: "Video call feedback",
+    label: "Chất lượng cuộc gọi",
     icon: IconBrandZoom,
   },
 ];

@@ -51,6 +51,13 @@ interface Address {
   route: string;
 }
 
+export interface Admin {
+  _id: string;
+  name: string;
+  image: string;
+  email: string;
+  role: string;
+}
 export interface User {
   _id: string;
   name: string;

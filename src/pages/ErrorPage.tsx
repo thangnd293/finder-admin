@@ -16,7 +16,7 @@ export default function ErrorPage() {
           Sorry, we couldn't find the page you're looking for.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Button component={Link} to={ROUTE.HOME}>
+          <Button component={Link} to={ROUTE.DASHBOARD}>
             Go back home
           </Button>
           <Button variant="subtle">

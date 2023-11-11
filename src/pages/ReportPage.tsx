@@ -1,18 +1,10 @@
+import PageLayout from "@/layouts/PageLayout";
 import ReportTable from "@/modules/report/ReportTable";
 
-const ReportPage = () => {
+export default function ReportPage() {
   return (
-    <div>
-      <header className="sticky text-xl font-bold flex items-center px-8 top-0 h-header shadow-sm bg-white z-50">
-        Báo cáo
-      </header>
-      <main className="container p-8 mx-auto">
-        <div className="container mx-auto px-8 py-5 shadow-sm bg-white border-border border border-solid rounded-md">
-          <ReportTable />
-        </div>
-      </main>
-    </div>
+    <PageLayout header="Báo cáo">
+      <ReportTable />
+    </PageLayout>
   );
-};
-
-export default ReportPage;
+}

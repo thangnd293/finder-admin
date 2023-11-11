@@ -1,5 +1,5 @@
 import axiosInstance from "@/configs/axios";
-import { User } from "@/types/user";
+import { Admin } from "@/types/user";
 import {
   UseQueryOptions,
   useQuery,
@@ -9,8 +9,8 @@ import { AxiosError } from "axios";
 
 export const getCurrentUserKey = () => ["user", "current"];
 
-export const useCurrentUser = <TData = User>(
-  options?: UseQueryOptions<User, AxiosError, TData>
+export const useCurrentUser = <TData = Admin>(
+  options?: UseQueryOptions<Admin, AxiosError, TData>
 ) => {
   return useQuery({
     queryKey: getCurrentUserKey(),
@@ -36,7 +36,7 @@ export const useInvalidateCurrentUser = () => {
 };
 
 const getCurrentUser = async () => {
-  const { data } = await axiosInstance.get<User>("/users/current-user");
+  const { data } = await axiosInstance.get<Admin>("/admin/current-admin");
 
   return data;
 };

@@ -1,9 +1,8 @@
 export const ROUTE = {
   LOGIN: "/login",
-  HOME: "/",
-  DASHBOARD: "/dashboard",
+  DASHBOARD: "/",
   REPORT: "/report",
   OFFER: "/offer",
-  DATING_FEEDBACK: "/dating-feedback",
+  DATING: "/dating",
   VIDEO_CALL_FEEDBACK: "/video-call-feedback",
 };

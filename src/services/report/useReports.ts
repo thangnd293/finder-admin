@@ -1,7 +1,8 @@
 import axiosInstance from "@/configs/axios";
 import { List } from "@/types/http";
 import { Report } from "@/types/report";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 const getAllReport = async () => {
   const { data } = await axiosInstance.get<List<Report>>(
@@ -15,4 +16,14 @@ export const useReports = () => {
     queryKey: ["reports"],
     queryFn: getAllReport,
   });
+};
+
+export const useInvalidateReports = () => {
+  const queryClient = useQueryClient();
+
+  return useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["reports"],
+    });
+  }, [queryClient]);
 };

@@ -7,6 +7,7 @@ export interface Report {
   reason: string;
   description: string;
   images: Image[];
+  isVerified: boolean;
   createdAt: string;
   updatedAt: string;
 }

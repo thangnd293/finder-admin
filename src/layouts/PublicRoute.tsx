@@ -5,7 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 const PublicRoute = () => {
   const accessToken = getCookie("accessToken");
 
-  if (accessToken) return <Navigate to={ROUTE.HOME} replace={true} />;
+  if (accessToken) return <Navigate to={ROUTE.DASHBOARD} replace={true} />;
 
   return <Outlet />;
 };

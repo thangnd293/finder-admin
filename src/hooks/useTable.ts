@@ -13,7 +13,6 @@ interface TableOptions<TData extends Record<string, any>>
     | "mantineTableBodyCellProps"
     | "paginationDisplayMode"
     | "enableRowNumbers"
-    | "enableRowActions"
     | "positionActionsColumn"
     | "localization"
   > {}
@@ -37,7 +36,6 @@ export const useTable = <TData extends Record<string, any> = {}>(
     },
     paginationDisplayMode: "pages",
     enableRowNumbers: true,
-    enableRowActions: true,
     positionActionsColumn: "last",
     localization: MRT_Localization_VI,
     ...tableOptions,

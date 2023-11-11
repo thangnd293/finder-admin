@@ -1,25 +1,38 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ErrorPage from "./pages/ErrorPage";
-import LoginPage from "./pages/LoginPage";
-import { HomePage } from "./pages/HomePage";
-import MainLayout from "./layouts/MainLayout";
 import { ROUTE } from "./constants/route";
-import ReportPage from "./pages/ReportPage";
 import PublicRoute from "./layouts/PublicRoute";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    lazy: async () => {
+      const { default: Component } = await import("./layouts/MainLayout");
+      return { Component };
+    },
     errorElement: <ErrorPage />,
+
     children: [
       {
         path: "",
-        element: <HomePage />,
+        lazy: async () => {
+          const { default: Component } = await import("./pages/DashboardPage");
+          return { Component };
+        },
       },
       {
         path: ROUTE.REPORT,
-        element: <ReportPage />,
+        lazy: async () => {
+          const { default: Component } = await import("./pages/ReportPage");
+          return { Component };
+        },
+      },
+      {
+        path: ROUTE.DATING,
+        lazy: async () => {
+          const { default: Component } = await import("./pages/DatingPage");
+          return { Component };
+        },
       },
     ],
   },
@@ -29,7 +42,10 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <LoginPage />,
+        lazy: async () => {
+          const { default: Component } = await import("./pages/LoginPage");
+          return { Component };
+        },
       },
     ],
   },

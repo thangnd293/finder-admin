@@ -10,7 +10,7 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
+import { isEmail, isNotEmpty, useForm } from "@mantine/form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -24,18 +24,18 @@ export default function LoginPage() {
   const login = useLogin({
     onSuccess: ({ accessToken }) => {
       setCookie("accessToken", accessToken, 30);
-      navigate(ROUTE.HOME);
+      navigate(ROUTE.DASHBOARD);
     },
     onError: (error) => toast.error(error.response?.data.message),
   });
 
   const { onSubmit, getInputProps } = useForm<LoginFormValues>({
     initialValues: {
-      email: "+84344329446",
-      password: "682436",
+      email: "admin@gmail.com",
+      password: "123456",
     },
     validate: {
-      email: isNotEmpty("Email không hợp lệ"),
+      email: isEmail("Email không hợp lệ"),
       password: isNotEmpty("Password không được để trống"),
     },
   });
