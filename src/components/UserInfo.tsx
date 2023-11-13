@@ -1,14 +1,12 @@
 import { Avatar, Text, clsx } from "@mantine/core";
 
 interface UserInfoProps extends React.ComponentPropsWithoutRef<"div"> {
-  userID: string;
   avatar?: string;
   name: string;
   email?: string;
   clickToSeeDetail?: boolean;
 }
 const UserInfo = ({
-  userID,
   avatar,
   name,
   email,

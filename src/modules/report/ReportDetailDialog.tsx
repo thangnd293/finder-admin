@@ -48,7 +48,6 @@ const ReportDetailDialog = ({
                   Người báo cáo
                 </Text>
                 <UserInfo
-                  userID={reportBy._id}
                   avatar={reportBy.images?.[0]?.url}
                   name={reportBy.name}
                   email={reportBy.email}
@@ -60,7 +59,6 @@ const ReportDetailDialog = ({
                   Người bị báo cáo
                 </Text>
                 <UserInfo
-                  userID={reportedUser._id}
                   avatar={reportedUser.images?.[0]?.url}
                   name={reportedUser.name}
                   email={reportedUser.email}

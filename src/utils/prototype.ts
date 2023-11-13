@@ -11,6 +11,7 @@ declare global {
     prettyDate(): string;
     prettyFullDate(): string;
     truncate(length: number): string;
+    formatPrice(): string;
   }
 }
 
@@ -36,6 +37,14 @@ String.prototype.truncate = function (length: number) {
   return this.length > length
     ? this.substring(0, length) + "..."
     : this.toString();
+};
+
+String.prototype.formatPrice = function () {
+  const price = Number(this);
+  return price.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 };
 
 export {};
