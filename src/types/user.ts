@@ -58,6 +58,7 @@ export interface Admin {
   email: string;
   role: string;
 }
+
 export interface User {
   _id: string;
   name: string;
@@ -105,4 +106,6 @@ export interface User {
     amount: 0;
     expiredDate: string;
   }[];
+  isBlocked: boolean;
+  blockedAt?: string;
 }

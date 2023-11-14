@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { useTable } from "@/hooks/useTable";
-import { useReports } from "@/services/report/useReports";
+import { useInvalidateReports, useReports } from "@/services/report/useReports";
 import { Report } from "@/types/report";
 import { type Image as ImageType } from "@/types/user";
 import { Badge, Menu, Text } from "@mantine/core";
@@ -15,7 +15,11 @@ import { modals } from "@mantine/modals";
 const ReportTable = () => {
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const { data } = useReports();
-  const blockUser = useBlockUser();
+  const invalidateReports = useInvalidateReports();
+
+  const blockUser = useBlockUser({
+    onSuccess: invalidateReports,
+  });
 
   const columns = useMemo<MRT_ColumnDef<Report>[]>(
     () => [
@@ -24,7 +28,6 @@ const ReportTable = () => {
         header: "Người báo cáo",
         accessorFn: ({ reportBy }) => (
           <UserInfo
-            userID={reportBy._id}
             avatar={reportBy.images?.[0]?.url}
             name={reportBy.name}
             email={reportBy.email}
@@ -36,7 +39,6 @@ const ReportTable = () => {
         header: "Người bị báo cáo",
         accessorFn: ({ reportedUser }) => (
           <UserInfo
-            userID={reportedUser._id}
             avatar={reportedUser.images?.[0]?.url}
             name={reportedUser.name}
             email={reportedUser.email}
@@ -67,7 +69,7 @@ const ReportTable = () => {
         Cell: ({ cell }) =>
           cell.getValue<boolean>() ? (
             <Badge radius="xs" color="green">
-              Đã block
+              Đã xử lý
             </Badge>
           ) : (
             <Badge radius="xs" color="orange">
@@ -90,16 +92,17 @@ const ReportTable = () => {
 
     renderRowActionMenuItems: ({
       row: {
-        original: { reportedUser },
+        original: { reportedUser, isVerified },
       },
     }) => (
       <Menu.Item
         icon={<IconLock size={16} />}
+        disabled={isVerified}
         onClick={() =>
           openConfirmBlockModal(reportedUser._id, reportedUser.name)
         }
       >
-        Khóa người dùng
+        Chặn người dùng
       </Menu.Item>
     ),
   });

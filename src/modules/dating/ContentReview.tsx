@@ -27,7 +27,6 @@ const ContentReview = ({
   return (
     <Stack spacing={10}>
       <UserInfo
-        userID={reviewer._id}
         name={reviewer.name}
         email={reviewer.email}
         avatar={reviewer.images?.[0]?.url}

@@ -18,7 +18,6 @@ const DatingTable = () => {
         header: "Người gửi",
         accessorFn: ({ sender }) => (
           <UserInfo
-            userID={sender._id}
             avatar={sender.images?.[0]?.url}
             name={sender.name}
             email={sender.email}
@@ -30,7 +29,6 @@ const DatingTable = () => {
         header: "Người nhận",
         accessorFn: ({ receiver }) => (
           <UserInfo
-            userID={receiver._id}
             avatar={receiver.images?.[0]?.url}
             name={receiver.name}
             email={receiver.email}

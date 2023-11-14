@@ -5,4 +5,5 @@ export const ROUTE = {
   OFFER: "/offer",
   DATING: "/dating",
   VIDEO_CALL_FEEDBACK: "/video-call-feedback",
+  USER_MANAGEMENT: "/user-management",
 };

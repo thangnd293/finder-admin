@@ -1,21 +1,23 @@
 import axiosInstance from "@/configs/axios";
 import { UseMutationOptions, useMutation } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { useInvalidateOffers } from "./useOffers";
 
-const blockUser = async (userId: string) => {
-  const { data } = await axiosInstance.post(`report/block/${userId}`);
+const deleteOffer = async (id: string) => {
+  const { data } = await axiosInstance.delete(`/offering/${id}`);
   return data;
 };
 
-export const useBlockUser = (
+export const useDeleteOffer = (
   config: UseMutationOptions<any, unknown, string, unknown> = {}
 ) => {
+  const invalidateOffers = useInvalidateOffers();
+
   return useMutation({
-    mutationFn: blockUser,
+    mutationFn: deleteOffer,
     ...config,
     onSuccess: (...args) => {
-      toast.success("Đã chặn người dùng");
       config.onSuccess?.(...args);
+      invalidateOffers();
     },
   });
 };
