@@ -34,6 +34,13 @@ const router = createBrowserRouter([
           return { Component };
         },
       },
+      {
+        path: ROUTE.OFFER,
+        lazy: async () => {
+          const { default: Component } = await import("./pages/OfferPage");
+          return { Component };
+        },
+      },
     ],
   },
   {
