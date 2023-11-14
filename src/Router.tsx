@@ -41,6 +41,15 @@ const router = createBrowserRouter([
           return { Component };
         },
       },
+      {
+        path: ROUTE.USER_MANAGEMENT,
+        lazy: async () => {
+          const { default: Component } = await import(
+            "./pages/UserManagementPage"
+          );
+          return { Component };
+        },
+      },
     ],
   },
   {

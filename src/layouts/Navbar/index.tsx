@@ -15,6 +15,7 @@ import {
   IconFlag,
   IconLogout,
   IconPhotoHeart,
+  IconUser,
 } from "@tabler/icons-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -114,5 +115,10 @@ const data = [
     link: ROUTE.VIDEO_CALL_FEEDBACK,
     label: "Chất lượng cuộc gọi",
     icon: IconBrandZoom,
+  },
+  {
+    link: ROUTE.USER_MANAGEMENT,
+    label: "Quản lý người dùng",
+    icon: IconUser,
   },
 ];
