@@ -1,6 +1,4 @@
-import { Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import "@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css";
 
 import dayjs from "dayjs";
@@ -8,9 +6,11 @@ import { useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import { Doughnut, Line } from "react-chartjs-2";
 
+import { RangeTime } from "../_api/common.types";
 import { BreakDown, getStatisticRevenue } from "../_api/statistic-revenue";
 import { hexToRgba } from "../_utils/colors";
 import generateDateObject from "../_utils/generate-date-object";
+import DatePicker from "./date-picker";
 import "./styles.css";
 import Title from "./title";
 
@@ -41,17 +41,8 @@ const yesterdayBegin = new Date(
 );
 const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-const rangeTimes = [
-  { value: "Day", label: "Day" },
-  { value: "Week", label: "Week" },
-  { value: "Month", label: "Month" },
-  { value: "Year", label: "Year" },
-] as const;
-
-type RangeTimeValue = (typeof rangeTimes)[number]["value"];
-
 export default function StatisticRevenue() {
-  const [range, setRange] = useState<"Day" | "Week" | "Month" | "Year">("Day");
+  const [range, setRange] = useState<RangeTime>("Day");
   const [time, setTime] = useState<Value>([yesterdayBegin, todayEnd]);
   const { data: { breakDown, trendLine } = {} } = useQuery({
     queryKey: ["statistic-revenue", ...time, range],
@@ -88,31 +79,12 @@ export default function StatisticRevenue() {
     <div className="grid gap-10">
       <Title>Thống kê doanh thu</Title>
       <div className="grid grid-cols-[1fr_2fr] gap-10">
-        <div>
-          <p className="font-medium">Chọn khoảng thời gian</p>
-          <div className="flex items-end gap-4">
-            <Select
-              placeholder="Day"
-              defaultValue="Day"
-              data={rangeTimes}
-              onChange={(value: RangeTimeValue) => {
-                setRange(value);
-              }}
-            />
-            <DateRangePicker
-              calendarAriaLabel="Toggle calendar"
-              clearAriaLabel="Clear value"
-              dayAriaLabel="Day"
-              monthAriaLabel="Month"
-              nativeInputAriaLabel="Date"
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              onChange={setTime as unknown as any}
-              value={time}
-              yearAriaLabel="Year"
-              clearIcon={null}
-            />
-          </div>
-        </div>
+        <DatePicker
+          range={range}
+          setRange={setRange}
+          setTime={setTime}
+          time={time}
+        />
 
         <div className="grid items-center w-full">
           <div className="flex justify-between h-full">
