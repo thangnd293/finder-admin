@@ -1,5 +1,6 @@
 import NewUsers from "./_comps/new-users";
 import StatisticRevenue from "./_comps/statistic-revenue";
+import TopUsers from "./_comps/top-users";
 
 export default function DashboardPage() {
   return (
@@ -19,11 +20,16 @@ export default function DashboardPage() {
           </Card>
         </div>
       </div> */}
-      <div className="bg-white p-6 rounded-md">
-        <StatisticRevenue />
+      <div className="rounded-md grid grid-cols-2 gap-6">
+        <div className="bg-white  p-6">
+          <NewUsers />
+        </div>
+        <div className="bg-white  p-6">
+          <TopUsers />
+        </div>
       </div>
       <div className="bg-white p-6 rounded-md">
-        <NewUsers />
+        <StatisticRevenue />
       </div>
     </div>
   );
