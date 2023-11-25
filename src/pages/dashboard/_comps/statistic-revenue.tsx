@@ -97,7 +97,11 @@ export default function StatisticRevenue() {
                     className="flex justify-center flex-col items-center w-full gap-3 last:border-r-2 border-l-2 border-neutral-300 border-solid h-full"
                   >
                     <div className="gap-3 flex items-center">
-                      <img src={offering.iconUrl} alt="iconUrl" />
+                      <img
+                        className="h-10 object-cover"
+                        src={offering.iconUrl}
+                        alt="iconUrl"
+                      />
                       <p
                         style={{ color: offering.style.primaryColor }}
                         className="text-2xl font-semibold"
