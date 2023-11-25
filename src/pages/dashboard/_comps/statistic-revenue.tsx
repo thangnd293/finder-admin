@@ -9,24 +9,26 @@ import { Doughnut, Line } from "react-chartjs-2";
 import { RangeTime } from "../_api/common.types";
 import { BreakDown, getStatisticRevenue } from "../_api/statistic-revenue";
 import { hexToRgba } from "../_utils/colors";
-import generateDateObject from "../_utils/generate-date-object";
+import generateDateObject, {
+  toDataArray,
+} from "../_utils/generate-date-object";
 import DatePicker from "./date-picker";
 import "./styles.css";
 import Title from "./title";
 
 const getRatioOfRevenue = (breakDown: Record<string, BreakDown>) => {
-  const lables: string[] = [];
+  const labels: string[] = [];
   const data: number[] = [];
   const colors: string[] = [];
   for (const key in breakDown) {
     if (Object.prototype.hasOwnProperty.call(breakDown, key)) {
       const element = breakDown[key];
-      lables.push(element.offering.type);
+      labels.push(element.offering.type);
       data.push(element.ratio);
       colors.push(element.offering.style.primaryColor);
     }
   }
-  return { lables, data, colors };
+  return { labels, data, colors };
 };
 
 type ValuePiece = Date | null;
@@ -61,19 +63,26 @@ export default function StatisticRevenue() {
     range
   );
 
-  const { lables, data, colors } = getRatioOfRevenue(breakDown || {});
+  const { labels, data, colors } = getRatioOfRevenue(breakDown || {});
 
   const dataTrendLine = Object.keys(trendLine || {}).map((key) => {
-    const newDateObject = { ...dataObject };
+    const newDateObject = JSON.parse(JSON.stringify(dataObject));
     trendLine?.[key].data.forEach((item) => {
-      newDateObject.data[item.date] = item.totalAmount;
+      newDateObject[item.date] = item.totalAmount;
     });
 
     return {
       title: trendLine![key].offering.type,
-      data: newDateObject.toDataArray(),
+      data: toDataArray(newDateObject),
     };
   });
+
+  // const total = breakDown.reduce((a, b) => a + b, 0);
+
+  const total = Object.keys(breakDown || {}).reduce(
+    (a, b) => a + breakDown![b].value,
+    0
+  );
 
   return (
     <div className="grid gap-10">
@@ -121,12 +130,12 @@ export default function StatisticRevenue() {
 
       <div className="grid grid-cols-[1fr_2fr] gap-10">
         <div className="w-full relative">
-          {/* <div className="absolute top-[44%] left-[43%] -translate-x-1/2 -translate-y-1/2 ">
+          <div className="absolute top-[44%] left-[43%] -translate-x-1/2 -translate-y-1/2 ">
             <div className="text-2xl font-semibold">{total / 1000}K</div>
-          </div> */}
+          </div>
           <Doughnut
             data={{
-              labels: lables,
+              labels: labels,
               datasets: [
                 {
                   label: "Percentage:",
@@ -157,7 +166,7 @@ export default function StatisticRevenue() {
               },
             }}
             data={{
-              labels: dataObject.toKeyArray(),
+              labels: toDataArray(dataObject),
               datasets: dataTrendLine.map((item, index) => ({
                 label: item.title,
                 data: item.data,
