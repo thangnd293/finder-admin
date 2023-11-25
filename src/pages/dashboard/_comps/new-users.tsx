@@ -4,7 +4,10 @@ import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { RangeTime } from "../_api/common.types";
 import { getNewUsers } from "../_api/new-users";
-import generateDateObject from "../_utils/generate-date-object";
+import generateDateObject, {
+  toDataArray,
+  toKeyArray,
+} from "../_utils/generate-date-object";
 import DatePicker from "./date-picker";
 import Title from "./title";
 
@@ -37,13 +40,15 @@ export default function NewUsers() {
   );
 
   const dataNewUsers = (() => {
-    const newDateObject = { ...dataObject };
+    const newDateObject = JSON.parse(
+      JSON.stringify(dataObject)
+    ) as typeof dataObject;
     data?.forEach((item) => {
       const day = item.date.toString();
-      newDateObject.data[day] = item.count;
+      newDateObject[day] = item.count;
     });
 
-    return newDateObject.toDataArray();
+    return toDataArray(newDateObject);
   })();
 
   return (
@@ -72,7 +77,7 @@ export default function NewUsers() {
               },
             }}
             data={{
-              labels: dataObject.toKeyArray(),
+              labels: toKeyArray(dataObject),
               datasets: [
                 {
                   label: "Số người đăng ký mới",

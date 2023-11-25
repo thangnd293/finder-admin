@@ -65,16 +65,13 @@ export default function generateDateObject(
       );
   }
 
-  return Object.assign(
-    {},
-    {
-      data: dateObject,
-      toDataArray: () => {
-        return Object.keys(dateObject).map((key) => dateObject[key]);
-      },
-      toKeyArray: () => {
-        return Object.keys(dateObject).map((key) => key);
-      },
-    }
-  );
+  return dateObject;
 }
+
+export const toDataArray = (data: Record<string, number>) => {
+  return Object.keys(data).map((key) => data[key]);
+};
+
+export const toKeyArray = (data: Record<string, number>) => {
+  return Object.keys(data).map((key) => key);
+};
