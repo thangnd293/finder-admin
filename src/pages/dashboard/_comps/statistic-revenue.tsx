@@ -11,6 +11,7 @@ import { BreakDown, getStatisticRevenue } from "../_api/statistic-revenue";
 import { hexToRgba } from "../_utils/colors";
 import generateDateObject, {
   toDataArray,
+  toKeyArray,
 } from "../_utils/generate-date-object";
 import DatePicker from "./date-picker";
 import "./styles.css";
@@ -166,7 +167,7 @@ export default function StatisticRevenue() {
               },
             }}
             data={{
-              labels: toDataArray(dataObject),
+              labels: toKeyArray(dataObject),
               datasets: dataTrendLine.map((item, index) => ({
                 label: item.title,
                 data: item.data,
