@@ -1,9 +1,12 @@
+import {
+  ActionType,
+  getActionStatistic,
+} from "@/pages/dashboard/_api/action-statistic";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import { RangeTime } from "../_api/common.types";
-import { getNewUsers } from "../_api/new-users";
 import generateDateObject, {
   toDataArray,
   toKeyArray,
@@ -19,13 +22,20 @@ const now = new Date();
 const yesterdayBegin = new Date(now.getFullYear(), now.getMonth(), 1);
 const todayEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-export default function NewUsers() {
+function ActionStatisticChart({
+  title,
+  type,
+}: {
+  title: string;
+  type: ActionType;
+}) {
   const [range, setRange] = useState<RangeTime>("Day");
   const [time, setTime] = useState<Value>([yesterdayBegin, todayEnd]);
+
   const { data = [] } = useQuery({
-    queryKey: ["new-users", ...time, range],
+    queryKey: ["action-statistic", type, ...time, range],
     queryFn: () => {
-      return getNewUsers({
+      return getActionStatistic(type)({
         typeRange: range,
         fromDate: dayjs(time[0]).format("YYYY-MM-DD"),
         toDate: dayjs(time[1]).format("YYYY-MM-DD"),
@@ -39,21 +49,21 @@ export default function NewUsers() {
     range
   );
 
-  const dataNewUsers = (() => {
-    const newDateObject = JSON.parse(
+  const dataArray = (() => {
+    const newDataArray = JSON.parse(
       JSON.stringify(dataObject)
     ) as typeof dataObject;
     data?.forEach((item) => {
       const day = item.date.toString();
-      newDateObject[day] = item.count;
+      newDataArray[day] = item.count;
     });
 
-    return toDataArray(newDateObject);
+    return toDataArray(newDataArray);
   })();
 
   return (
     <div className="flex flex-col gap-10 h-full">
-      <Title>Số người đăng ký mới</Title>
+      <Title>{title}</Title>
       <div className="flex flex-col gap-2 grow">
         <DatePicker
           range={range}
@@ -62,17 +72,11 @@ export default function NewUsers() {
           time={time}
         />
         <div className="flex grow items-end">
-          <Bar
+          <Line
             options={{
-              responsive: true,
-
               plugins: {
                 legend: {
-                  position: "top" as const,
-                  display: false,
-                },
-                title: {
-                  display: true,
+                  position: "bottom" as const,
                 },
               },
             }}
@@ -80,15 +84,48 @@ export default function NewUsers() {
               labels: toKeyArray(dataObject),
               datasets: [
                 {
-                  label: "Số người đăng ký mới",
-                  data: dataNewUsers,
-                  backgroundColor: "rgba(53, 162, 235, 0.5)",
+                  data: dataArray,
+                  backgroundColor: "#3B82F6",
+                  borderColor: "#a3c6ff",
+                  label: title,
+                  tension: 0.4,
                 },
               ],
             }}
           />
         </div>
       </div>
+    </div>
+  );
+}
+// #3B82F6
+const list = [
+  {
+    type: "appointment",
+    title: "Số lượt hẹn",
+  },
+  {
+    type: "like",
+    title: "Số lượt thích",
+  },
+  {
+    type: "matched",
+    title: "Số lượt ghép đôi",
+  },
+  {
+    type: "passes",
+    title: "Số lượt bỏ qua",
+  },
+] satisfies Array<{ type: ActionType; title: string }>;
+
+export default function ActionStatistic() {
+  return (
+    <div className="grid gap-6 grid-cols-[repeat(auto-fill,_minmax(500px,_1fr))]">
+      {list.map((item) => (
+        <div className="bg-white p-6 rounded-md" key={item.type}>
+          <ActionStatisticChart title={item.title} type={item.type} />
+        </div>
+      ))}
     </div>
   );
 }

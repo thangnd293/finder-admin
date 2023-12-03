@@ -13,11 +13,11 @@ type ValuePiece = Date | null;
 type Value = [ValuePiece, ValuePiece];
 
 const now = new Date();
-const yesterdayBegin = new Date(now.getFullYear(), 0, 1);
-const todayEnd = new Date(now.getFullYear(), 11, 1);
+const yesterdayBegin = new Date(now.getFullYear(), now.getMonth(), 1);
+const todayEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
 export default function NewUsers() {
-  const [range, setRange] = useState<RangeTime>("Month");
+  const [range, setRange] = useState<RangeTime>("Day");
   const [time, setTime] = useState<Value>([yesterdayBegin, todayEnd]);
   const { data = [] } = useQuery({
     queryKey: ["top-users", ...time, range],

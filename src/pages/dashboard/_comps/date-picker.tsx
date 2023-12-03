@@ -73,7 +73,7 @@ export default function DatePicker({
   return (
     <div className="flex items-end flex-col gap-3">
       <p className="font-medium">Chọn khoảng thời gian</p>
-      <div className="flex items-end gap-4">
+      <div className="flex items-end gap-6">
         <Select
           placeholder="Day"
           defaultValue="Month"
@@ -84,6 +84,8 @@ export default function DatePicker({
           }}
         />
         <DateRangePicker
+          locale="vi"
+          format="dd/MM/yyyy"
           calendarAriaLabel="Toggle calendar"
           clearAriaLabel="Clear value"
           dayAriaLabel="Day"
