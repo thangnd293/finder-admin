@@ -37,12 +37,8 @@ type ValuePiece = Date | null;
 type Value = [ValuePiece, ValuePiece];
 
 const now = new Date();
-const yesterdayBegin = new Date(
-  now.getFullYear(),
-  now.getMonth(),
-  now.getDate() - 7
-);
-const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const yesterdayBegin = new Date(now.getFullYear(), now.getMonth(), 1);
+const todayEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
 export default function StatisticRevenue() {
   const [range, setRange] = useState<RangeTime>("Day");
@@ -159,7 +155,6 @@ export default function StatisticRevenue() {
         <div>
           <Line
             options={{
-              responsive: true,
               plugins: {
                 legend: {
                   position: "bottom" as const,
@@ -173,6 +168,7 @@ export default function StatisticRevenue() {
                 data: item.data,
                 backgroundColor: hexToRgba(colors[index], 0.5),
                 borderColor: hexToRgba(colors[index]),
+                tension: 0.3,
               })),
             }}
           />
