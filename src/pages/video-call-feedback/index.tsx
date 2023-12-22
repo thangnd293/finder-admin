@@ -1,55 +1,12 @@
 import axiosInstance from "@/configs/axios";
 import PageLayout from "@/layouts/PageLayout";
-import { RatingGroup } from "@ark-ui/react/rating-group";
 import { Button, Pagination, Select } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import dayjs from "dayjs";
-import { FaRegStar, FaStar } from "react-icons/fa";
 import "dayjs/locale/vi";
 import { useState } from "react";
-
-const RatingGroupUI = ({
-  value,
-  size = 24,
-}: {
-  value: number;
-  size?: number;
-}) => {
-  return (
-    <RatingGroup.Root disabled defaultValue={value} count={5}>
-      <RatingGroup.Control>
-        {({ items }) => {
-          return (
-            <div className="flex gap-1 items-center">
-              {items.map((item) => (
-                <RatingGroup.Item
-                  className="outline-none flex"
-                  key={item}
-                  index={item}
-                >
-                  {({ isHighlighted }) => {
-                    return isHighlighted ? (
-                      <FaStar
-                        className="text-yellow-400 transition-colors"
-                        size={size}
-                      />
-                    ) : (
-                      <FaRegStar
-                        className="text-yellow-400 transition-colors"
-                        size={size}
-                      />
-                    );
-                  }}
-                </RatingGroup.Item>
-              ))}
-            </div>
-          );
-        }}
-      </RatingGroup.Control>
-    </RatingGroup.Root>
-  );
-};
+import { FaStar } from "react-icons/fa";
 
 type Feedback = {
   results: Result[];
@@ -105,6 +62,59 @@ type MessageRating = {
 
 const objectKeys = <T extends object>(obj: T) =>
   Object.keys(obj) as Array<keyof T>;
+
+const RatingPercent = ({
+  value,
+  size = 24,
+  isPercent,
+}: {
+  value: number;
+  size?: number;
+  isPercent?: boolean;
+}) => {
+  // phần dư
+  const remainder = value % 1;
+  // phần nguyên
+  const round = value - remainder;
+
+  return (
+    <div>
+      {Array.from({ length: 5 }).map((_, index) => (
+        <FaStar
+          className={clsx([
+            index < round ? "text-yellow-400" : "text-gray-300",
+            {
+              "fill-[url(#grad)]": index === round && isPercent,
+            },
+          ])}
+          size={size}
+          key={index}
+        />
+      ))}
+      <svg
+        className="opacity-0 invisible absolute z-[-1]"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <linearGradient
+          id="grad"
+          x1="0%"
+          y1="0%"
+          x2={`${remainder * 100}%`}
+          y2="0%"
+        >
+          <stop
+            offset="100%"
+            style={{ stopColor: "rgb(250 204 21)", stopOpacity: 1 }}
+          />
+          <stop
+            offset="100%"
+            style={{ stopColor: "rgb(209 213 219)", stopOpacity: 1 }}
+          />
+        </linearGradient>
+      </svg>
+    </div>
+  );
+};
 
 export default function Page() {
   const [page, setPage] = useState(1);
@@ -178,7 +188,7 @@ export default function Page() {
                 <span className="text-4xl text-gray-600 font-medium">/5</span>
               </p>
               <div className="grid gap-2">
-                <RatingGroupUI value={3} size={36} />
+                <RatingPercent isPercent value={messageRating.avgRating} />
                 <span className="text-md font-medium text-gray-500">
                   {messageRating.totalRating} Ratings
                 </span>
@@ -194,7 +204,7 @@ export default function Page() {
                       className="flex justify-between items-center"
                     >
                       <div className="flex gap-6 items-center">
-                        <RatingGroupUI value={5 - index} size={20} />
+                        <RatingPercent value={5 - index} size={20} />
                         <div className="flex gap-3 items-center">
                           <div
                             style={
@@ -264,7 +274,7 @@ export default function Page() {
                   key={item.messageID}
                 >
                   <div className="flex justify-between items-center">
-                    <RatingGroupUI size={20} value={3} />
+                    <RatingPercent size={20} value={item.rating} />
                     <span className="text-gray-600">
                       {dayjs(item.createdAt).locale("vi").from(dayjs())}
                     </span>
