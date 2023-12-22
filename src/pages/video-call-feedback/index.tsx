@@ -172,7 +172,7 @@ export default function Page() {
             <div className="grid gap-5">
               <p className="">
                 <span className="font-semibold text-6xl">
-                  {messageRating.avgRating}
+                  {Math.round(messageRating.avgRating * 100) / 100}
                 </span>
                 <span></span>
                 <span className="text-4xl text-gray-600 font-medium">/5</span>
