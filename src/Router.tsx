@@ -37,6 +37,15 @@ const router = createBrowserRouter([
         },
       },
       {
+        path: ROUTE.VIDEO_CALL_FEEDBACK,
+        lazy: async () => {
+          const { default: Component } = await import(
+            "./pages/video-call-feedback"
+          );
+          return { Component };
+        },
+      },
+      {
         path: ROUTE.OFFER,
         lazy: async () => {
           const { default: Component } = await import("./pages/OfferPage");
