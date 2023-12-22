@@ -5,8 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
+import utc from "dayjs/plugin/utc";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
+dayjs.extend(utc);
 
 type Feedback = {
   results: Result[];
@@ -35,7 +37,7 @@ type Pagination = {
 };
 
 type Result = {
-  messageID: string;
+  messageId: string;
   rating: number;
   content: string;
   createdBy: CreatedBy;
@@ -91,27 +93,29 @@ const RatingPercent = ({
           key={index}
         />
       ))}
-      <svg
-        className="opacity-0 invisible absolute z-[-1]"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <linearGradient
-          id="grad"
-          x1="0%"
-          y1="0%"
-          x2={`${remainder * 100}%`}
-          y2="0%"
+      {isPercent && (
+        <svg
+          className="opacity-0 invisible absolute z-[-1]"
+          xmlns="http://www.w3.org/2000/svg"
         >
-          <stop
-            offset="100%"
-            style={{ stopColor: "rgb(250 204 21)", stopOpacity: 1 }}
-          />
-          <stop
-            offset="100%"
-            style={{ stopColor: "rgb(209 213 219)", stopOpacity: 1 }}
-          />
-        </linearGradient>
-      </svg>
+          <linearGradient
+            id="grad"
+            x1="0%"
+            y1="0%"
+            x2={`${remainder * 100}%`}
+            y2="0%"
+          >
+            <stop
+              offset="100%"
+              style={{ stopColor: "rgb(250 204 21)", stopOpacity: 1 }}
+            />
+            <stop
+              offset="100%"
+              style={{ stopColor: "rgb(209 213 219)", stopOpacity: 1 }}
+            />
+          </linearGradient>
+        </svg>
+      )}
     </div>
   );
 };
@@ -268,10 +272,10 @@ export default function Page() {
               </div>
             </div>
             <div className="grid gap-3">
-              {feedback.results.map((item) => (
+              {feedback.results.map((item, index) => (
                 <div
                   className="grid gap-3 border-b border-solid border-gray-200 pb-3"
-                  key={item.messageID}
+                  key={item.createdBy.name + item.messageId + index}
                 >
                   <div className="flex justify-between items-center">
                     <RatingPercent size={20} value={item.rating} />
