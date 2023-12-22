@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ark-ui/react": "^1.2.1",
     "@cloudinary/url-gen": "^1.13.0",
     "@emotion/react": "^11.11.1",
     "@mantine/carousel": "6.0.21",
