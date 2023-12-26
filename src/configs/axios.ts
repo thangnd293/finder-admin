@@ -2,7 +2,7 @@ import { eraseCookie, getCookie } from "@/utils/cookie";
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: `https://finder.sohe.in/api/v1`,
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   timeout: 5000,
   headers: { Accept: "application/json", "Content-Type": "application/json" },
 });
