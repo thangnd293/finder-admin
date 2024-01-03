@@ -11,7 +11,7 @@ export default function GenderChart() {
 
   return (
     <div>
-      <p className="font-medium">Age Distribution</p>
+      <p className="font-medium">Phân bổ tuổi</p>
       <div className="flex justify-evenly gap-4 h-full items-end pb-16">
         {ageGroup?.map((item) => (
           <div className="h-full flex flex-col justify-end gap-2">
@@ -20,7 +20,7 @@ export default function GenderChart() {
               <div
                 style={{
                   maxHeight: `${item.percentage}%`,
-                  opacity: `${item.percentage}%`,
+                  opacity: `${item.percentage + 20}%`,
                 }}
                 className={clsx("bg-blue-500 w-16 rounded-md grow")}
               />

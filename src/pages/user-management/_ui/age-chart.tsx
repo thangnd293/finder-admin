@@ -14,7 +14,7 @@ export default function AgeChart() {
   return (
     <div className="grid gap-4 items-start">
       <div className="grid gap-2">
-        <p className="font-medium">Gender Distribution</p>
+        <p className="font-medium">Phân bổ giới tính</p>
         <div>
           <div className="grid grid-cols-[repeat(auto-fill,_minmax(10%,_1fr))] gap-y-2 justify-items-center">
             {Array.from({ length: 100 }).map((_, index) => {
@@ -63,16 +63,14 @@ export default function AgeChart() {
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-sky-500"></span>
           <div>
-            <span className="font-semibold text-sm text-neutral-600">Male</span>
+            <span className="font-semibold text-sm text-neutral-600">Nam</span>
             <p className="text-lg">{genderGroup?.male.percentage}%</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-cyan-500"></span>
           <div>
-            <span className="font-semibold text-sm text-neutral-600">
-              Female
-            </span>
+            <span className="font-semibold text-sm text-neutral-600">Nữ</span>
             <p className="text-lg">{genderGroup?.female.percentage}%</p>
           </div>
         </div>

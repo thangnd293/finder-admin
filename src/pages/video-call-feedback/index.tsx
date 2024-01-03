@@ -22,9 +22,18 @@ type MessageCall = {
 };
 
 const messageCallMap = {
-  totalCount: "Tổng số cuộc gọi",
-  avgDuration: "Thời gian trung bình",
-  maxDurationCall: "Thời gian gọi dài nhất",
+  totalCount: {
+    title: "Tổng số cuộc gọi",
+    prefix: "",
+  },
+  avgDuration: {
+    title: "Thời gian trung bình",
+    prefix: "phút",
+  },
+  maxDurationCall: {
+    title: "Thời gian gọi dài nhất",
+    prefix: "phút",
+  },
 } as const;
 
 type Pagination = {
@@ -168,15 +177,18 @@ export default function Page() {
   return (
     <PageLayout isContainer={false} header="Phản hồi về chất lượng cuộc gọi">
       <div className="grid gap-6">
-        <div className="grid grid-cols-3 justify-center gap-20">
+        <div className="grid grid-cols-3 justify-center gap-14">
           {objectKeys(messageCall).map((key) => (
             <div
               key={key}
               className="grid gap-3 bg-white px-6 py-4 rounded-md shadow-sm border-border border border-solid"
             >
-              <p className="text-xl font-semibold">{messageCallMap[key]}</p>
+              <p className="text-xl font-semibold">
+                {messageCallMap[key].title}
+              </p>
               <p className="text-4xl font-semibold">
-                {Math.round(messageCall[key] * 100) / 100}
+                {Math.round(messageCall[key] * 100) / 100}{" "}
+                {messageCallMap[key].prefix}
               </p>
             </div>
           ))}
@@ -194,7 +206,7 @@ export default function Page() {
               <div className="grid gap-2">
                 <RatingPercent isPercent value={messageRating.avgRating} />
                 <span className="text-md font-medium text-gray-500">
-                  {messageRating.totalRating} Ratings
+                  {messageRating.totalRating} đánh giá
                 </span>
               </div>
             </div>
@@ -245,9 +257,9 @@ export default function Page() {
                   label="Sắp xếp"
                   defaultValue={"0"}
                   data={[
-                    { label: "Recent", value: "Recent" },
-                    { label: "High to low", value: "High to low" },
-                    { label: "Low to high", value: "Low to high" },
+                    { label: "Gần đây", value: "Recent" },
+                    { label: "Cao đến thấp", value: "High to low" },
+                    { label: "Thấp đến cao", value: "Low to high" },
                   ]}
                   value={sort}
                   onChange={(value) => value && setSort(value)}
@@ -258,7 +270,7 @@ export default function Page() {
                   label="Số sao"
                   defaultValue={"0"}
                   data={[
-                    { label: "All", value: "0" },
+                    { label: "Tất cả", value: "0" },
                     { label: "1", value: "1" },
                     { label: "2", value: "2" },
                     { label: "3", value: "3" },
