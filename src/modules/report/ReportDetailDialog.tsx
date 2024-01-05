@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Report } from "@/types/report";
 import {
+  Button,
   Group,
   Image,
   Modal,
@@ -16,14 +17,23 @@ interface ReportDetailDialogProps {
   report: Report;
   isOpen: boolean;
   onClose: () => void;
+  openConfirmBlockModalAction: () => void;
 }
 const ReportDetailDialog = ({
   report,
   isOpen,
   onClose,
+  openConfirmBlockModalAction,
 }: ReportDetailDialogProps) => {
-  const { reportBy, reportedUser, reason, description, images, createdAt } =
-    report || {};
+  const {
+    reportBy,
+    reportedUser,
+    reason,
+    description,
+    images,
+    createdAt,
+    isVerified,
+  } = report || {};
   const [isOpenImageView, setIsOpenImageView] = useState(false);
 
   return (
@@ -110,6 +120,22 @@ const ReportDetailDialog = ({
                 <Text fz="sm">Không có ảnh</Text>
               )}
             </div>
+
+            {!isVerified ? (
+              <div className="flex gap-4 w-full">
+                <Button onClick={onClose} variant="light" className="w-full">
+                  Huỷ
+                </Button>
+                <Button
+                  className="w-full"
+                  onClick={openConfirmBlockModalAction}
+                >
+                  Chặn
+                </Button>
+              </div>
+            ) : (
+              <Button disabled={isVerified}>Đã xử lý</Button>
+            )}
           </Stack>
         )}
       </Modal>

@@ -138,6 +138,13 @@ const ReportTable = () => {
     });
   }
 
+  const openConfirmBlockModalAction =
+    (userID: string, userName: string) => () => {
+      openConfirmBlockModal(userID, userName);
+      setSelectedReport(null);
+      invalidateReports();
+    };
+
   return (
     <>
       <MantineReactTable table={table} />
@@ -145,6 +152,10 @@ const ReportTable = () => {
         <ReportDetail
           isOpen={!!selectedReport}
           report={selectedReport}
+          openConfirmBlockModalAction={openConfirmBlockModalAction(
+            selectedReport.reportedUser._id,
+            selectedReport.reportedUser.name
+          )}
           onClose={() => setSelectedReport(null)}
         />
       )}
