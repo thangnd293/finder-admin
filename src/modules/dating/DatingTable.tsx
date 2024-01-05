@@ -16,37 +16,54 @@ const DatingTable = () => {
       {
         accessorKey: "sender.name",
         header: "Người gửi",
-        accessorFn: ({ sender }) => (
+        Cell: ({ row, renderedCellValue }) => (
           <UserInfo
-            avatar={sender.images?.[0]?.url}
-            name={sender.name}
-            email={sender.email}
+            avatar={row.original.sender.images?.[0]?.url}
+            name={renderedCellValue}
+            email={row.original.sender.email}
           />
         ),
       },
       {
         accessorKey: "receiver.name",
         header: "Người nhận",
-        accessorFn: ({ receiver }) => (
+        Cell: ({ row, renderedCellValue }) => (
           <UserInfo
-            avatar={receiver.images?.[0]?.url}
-            name={receiver.name}
-            email={receiver.email}
+            avatar={row.original.receiver.images?.[0]?.url}
+            name={renderedCellValue}
+            email={row.original.receiver.email}
           />
         ),
       },
       {
         accessorKey: "appointmentDate",
+        sortingFn: (a, b) => {
+          return (
+            new Date(a.original.appointmentDate).getTime() -
+            new Date(b.original.appointmentDate).getTime()
+          );
+        },
         header: "Ngày hẹn",
         Cell: ({ cell }) => cell.getValue<string>().prettyFullDate(),
       },
       {
         accessorKey: "createdAt",
+        sortingFn: (a, b) => {
+          return (
+            new Date(a.original.createdAt).getTime() -
+            new Date(b.original.createdAt).getTime()
+          );
+        },
         header: "Ngày tạo",
         Cell: ({ cell }) => cell.getValue<string>().prettyFullDate(),
       },
       {
         accessorKey: "reviewDatingStatus",
+        sortingFn: (a, b) => {
+          const aString = a.original.reviewDatingStatus.toString();
+          const bString = b.original.reviewDatingStatus.toString();
+          return aString.localeCompare(bString);
+        },
         header: "Trạng thái",
         Cell: ({ cell }) => (
           <DatingStatusBadge
@@ -60,11 +77,26 @@ const DatingTable = () => {
 
   const table = useTable({
     columns,
+    enableFilterMatchHighlighting: false,
     data: data?.results || [],
     mantineTableBodyRowProps: ({ row }) => ({
       onClick: () => setSelectedDating(row.original),
       sx: { cursor: "pointer" },
     }),
+    enableMultiSort: true,
+
+    filterFns: {
+      myCustomFilterFn: (row, id, filterValue) => {
+        const value = row.getValue(id);
+
+        if (typeof value !== "string") return false;
+        return value
+          .removeVietnameseTones()
+          .toLowerCase()
+          .includes(filterValue.removeVietnameseTones().toLowerCase());
+      },
+    },
+    globalFilterFn: "myCustomFilterFn", //set the global filter function to myCustomFilterFn
   });
 
   return (

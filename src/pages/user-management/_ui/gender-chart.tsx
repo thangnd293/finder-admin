@@ -13,8 +13,8 @@ export default function GenderChart() {
     <div>
       <p className="font-medium">Phân bổ tuổi</p>
       <div className="flex justify-evenly gap-4 h-full items-end pb-16">
-        {ageGroup?.map((item) => (
-          <div className="h-full flex flex-col justify-end gap-2">
+        {ageGroup?.map((item, index) => (
+          <div key={index} className="h-full flex flex-col justify-end gap-2">
             <p className="text-center text-neutral-700">{item.percentage}%</p>
             <Tooltip.Floating label={`${item.count} người dùng`} key={item._id}>
               <div

@@ -12,7 +12,6 @@ interface TableOptions<TData extends Record<string, any>>
     | "mantinePaperProps"
     | "mantineTableBodyCellProps"
     | "paginationDisplayMode"
-    | "enableRowNumbers"
     | "positionActionsColumn"
     | "localization"
   > {}

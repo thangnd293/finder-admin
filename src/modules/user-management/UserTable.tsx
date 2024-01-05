@@ -2,16 +2,22 @@ import UserInfo from "@/components/UserInfo";
 import { useTable } from "@/hooks/useTable";
 import { useBlockUser } from "@/services/report/useBlockUser";
 import { useUnblockUser } from "@/services/report/useUnblockUser";
-import { useInvalidateUsers, useUsers } from "@/services/user/useUsers";
+import { getAllUsers, useInvalidateUsers } from "@/services/user/useUsers";
 import { User } from "@/types/user";
 import { Badge, Menu, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconLock, IconLockOpen } from "@tabler/icons-react";
-import { MRT_ColumnDef, MantineReactTable } from "mantine-react-table";
-import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  MRT_ColumnDef,
+  MRT_ColumnFiltersState,
+  MRT_PaginationState,
+  MRT_SortingState,
+  MantineReactTable,
+} from "mantine-react-table";
+import { useMemo, useState } from "react";
 
 const UserTable = () => {
-  const { data } = useUsers();
   const invalidateUsers = useInvalidateUsers();
 
   const blockUser = useBlockUser({
@@ -19,11 +25,54 @@ const UserTable = () => {
   });
   const unblockUser = useUnblockUser({ onSuccess: invalidateUsers });
 
+  const [rowCount, setRowCount] = useState(0);
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
+    []
+  );
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [sorting, setSorting] = useState<MRT_SortingState>([]);
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const { data, isLoading, isError, isFetching } = useQuery({
+    queryKey: ["users", pagination, columnFilters, globalFilter, sorting],
+    queryFn: () => {
+      const sortingData = [];
+      console.log({ sorting });
+      if (sorting.find((sort) => sort.id === "createdAt")) {
+        sortingData.push([
+          "createdAt",
+          sorting.find((sort) => sort.id === "createdAt")?.desc
+            ? "desc"
+            : "asc",
+        ]);
+      }
+      if (sorting.find((sort) => sort.id === "name")) {
+        sortingData.push([
+          "keyword",
+          sorting.find((sort) => sort.id === "name")?.desc ? "desc" : "asc",
+        ]);
+      }
+      return getAllUsers({
+        page: pagination.pageIndex + 1,
+        size: pagination.pageSize,
+        name: globalFilter,
+        ...Object.fromEntries(sortingData),
+      });
+    },
+    onSuccess: (data) => {
+      setRowCount(data.pagination.totalCount);
+    },
+  });
+
   const columns = useMemo<MRT_ColumnDef<User>[]>(
     () => [
       {
         accessorKey: "name",
         header: "Người dùng",
+        enableColumnFilter: false,
         accessorFn: ({ name, images, email }) => (
           <UserInfo avatar={images?.[0]?.url} name={name} email={email} />
         ),
@@ -31,11 +80,15 @@ const UserTable = () => {
       {
         accessorKey: "createdAt",
         header: "Ngày tham gia",
+        enableColumnFilter: false,
         Cell: ({ cell }) => cell.getValue<string>().prettyDate(),
       },
       {
         accessorKey: "isBlocked",
         header: "Trạng thái",
+        enableSorting: false,
+        enableColumnFilter: false,
+        enableGlobalFilter: false,
         Cell: ({ cell, row: { original } }) => {
           const isBlocked = cell.getValue<boolean>();
           return isBlocked ? (
@@ -58,7 +111,26 @@ const UserTable = () => {
   const table = useTable({
     columns,
     data: data?.results || [],
+    enableRowNumbers: false,
     enableRowActions: true,
+    getRowId: (row) => row._id,
+    manualFiltering: true,
+    manualPagination: true,
+    manualSorting: true,
+    rowCount,
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    state: {
+      columnFilters,
+      globalFilter,
+      isLoading,
+      pagination,
+      showAlertBanner: isError,
+      showProgressBars: isFetching,
+      sorting,
+    },
     renderRowActionMenuItems: ({
       row: {
         original: { _id, name, isBlocked },

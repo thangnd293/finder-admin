@@ -89,7 +89,19 @@ const ReportTable = () => {
       onClick: () => setSelectedReport(row.original),
       sx: { cursor: "pointer" },
     }),
-
+    enableFilterMatchHighlighting: false,
+    filterFns: {
+      myCustomFilterFn: (row, id, filterValue) => {
+        const value = row.getValue(id);
+        console.log(filterValue.removeVietnameseTones().toLowerCase());
+        if (typeof value !== "string") return false;
+        return value
+          .removeVietnameseTones()
+          .toLowerCase()
+          .includes(filterValue.removeVietnameseTones().toLowerCase());
+      },
+    },
+    globalFilterFn: "myCustomFilterFn", //set the global filter function to myCustomFilterFn
     renderRowActionMenuItems: ({
       row: {
         original: { reportedUser, isVerified },
