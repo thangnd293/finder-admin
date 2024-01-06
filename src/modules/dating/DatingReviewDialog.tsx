@@ -33,7 +33,7 @@ const DatingReviewDialog = ({
       onClose={onClose}
       scrollAreaComponent={ScrollArea.Autosize}
     >
-      <Group spacing={10}>
+      <Group className="h-full items-start" spacing={10}>
         <div className="flex-1 space-y-1">
           <Text size="sm" weight={500}>
             Người gửi
@@ -47,7 +47,7 @@ const DatingReviewDialog = ({
 
         <Divider orientation="vertical" />
 
-        <div className="flex-1 space-y-1">
+        <div className="flex-1 h-full">
           <Text size="sm" weight={500}>
             Người nhận
           </Text>
